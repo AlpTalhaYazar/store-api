@@ -1,5 +1,5 @@
-const { StatusCodes } = require('http-status-codes');
-const Result = require('../utils/Result');
+import { StatusCodes } from 'http-status-codes';
+import Result from '../utils/Result';
 
 const errorHandlerMiddleware = async (err, req, res, next) => {
   const result = Result.failure(err.message);
