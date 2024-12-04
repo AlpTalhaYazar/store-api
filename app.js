@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
-import notFoundMiddleware from './middleware/not-found';
-import errorHandlerMiddleware from './middleware/error-handler';
+import { notFoundMiddleware } from './middleware/not-found.js';
+import { errorHandlerMiddleware } from './middleware/error-handler.js';
 
 const app = express();
 
@@ -10,6 +10,9 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.send('<h1>Store API</h1><a href="/api/v1/products">Products</a>');
 });
+
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
 
 const start = async () => {
     try {
