@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import { connectDB } from './db/connect.js';
 import { notFoundMiddleware } from './middleware/not-found.js';
 import { errorHandlerMiddleware } from './middleware/error-handler.js';
 
@@ -14,14 +15,18 @@ app.get('/', (req, res) => {
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
+const port = process.env.PORT || 3000;
+
 const start = async () => {
     try {
-        app.listen(process.env.PORT, () =>
-            console.log(`Server is listening on port ${process.env.PORT}...`)
-        );
+        await connectDB(process.env.MONGO_URI)
+            .then(() => console.log('Connected to the database'))
+            .catch((error) => console.error(error));
+
+        app.listen(port, console.log(`Server is running on port ${port}`));
     } catch (error) {
         console.error(error);
     }
-};
+}
 
-await start();
+start();
