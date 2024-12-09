@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import { connectDB } from './db/connect.js';
+import { productsRouter } from './routes/products.js';
 import { notFoundMiddleware } from './middleware/not-found.js';
 import { errorHandlerMiddleware } from './middleware/error-handler.js';
 
@@ -11,6 +12,8 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.send('<h1>Store API</h1><a href="/api/v1/products">Products</a>');
 });
+
+app.use('/api/v1/products', productsRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
