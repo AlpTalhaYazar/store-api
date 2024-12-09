@@ -1,7 +1,7 @@
-import { mongoose } from 'mongoose';
+import { mongoose } from "mongoose";
 
 const connectDB = async (url) => {
-    return mongoose.connect(url);
-}
+  return mongoose.connect(url);
+};
 
 export { connectDB };
