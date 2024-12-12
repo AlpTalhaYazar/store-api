@@ -18,8 +18,11 @@ const populate = async () => {
     await Product.insertMany(jsonProducts);
 
     console.log("Data imported successfully");
+
+    process.exit(0);
   } catch (error) {
     console.error(error);
+    process.exit(1);
   }
 };
 
