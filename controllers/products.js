@@ -1,11 +1,35 @@
 import { Product } from "../models/Product.js";
-import { Result } from "../utils/Result.js";
+import { Result, PaginationResult } from "../utils/Result.js";
 import { createCustomError } from "../errors/custom-error.js";
 
-const getAllProducts = async (req, res) => {
-  const products = await Product.find({});
+const getAllProducts = async (req, res, next) => {
+  const { page = 1, limit = 10, search, sort, ...queryFilter } = req.query;
 
-  const result = Result.success(products);
+  const pageNum = parseInt(page, 10);
+  const limitNum = parseInt(limit, 10);
+
+  if (pageNum < 1 || limitNum < 1) {
+    throw createCustomError("Page and limit must be positive integers", 400);
+  }
+
+  if (search) {
+    queryFilter.name = { $regex: search, $options: "i" };
+  }
+
+  const querySort = sort ? sort.split(",").join(" ") : "createdAt";
+
+  const [products, total] = await Promise.all([
+    Product.find()
+      .where(queryFilter)
+      .sort(querySort)
+      .limit(limitNum)
+      .skip((pageNum - 1) * limitNum)
+      .lean()
+      .exec(),
+    Product.countDocuments(queryFilter),
+  ]);
+
+  const result = new PaginationResult(products, pageNum, limitNum, total);
 
   res.status(200).json(result);
 };
