@@ -3,7 +3,7 @@ import { Result, PaginationResult } from "../utils/Result.js";
 import { createCustomError } from "../errors/custom-error.js";
 
 const getAllProducts = async (req, res, next) => {
-  const { page = 1, limit = 10, search, sort, ...queryFilter } = req.query;
+  const { page = 1, limit = 10, search, sort, fields, ...queryFilter } = req.query;
 
   const pageNum = parseInt(page, 10);
   const limitNum = parseInt(limit, 10);
@@ -24,6 +24,7 @@ const getAllProducts = async (req, res, next) => {
       .sort(querySort)
       .limit(limitNum)
       .skip((pageNum - 1) * limitNum)
+      .select(fields ? fields.split(",").join(" ") : "")
       .lean()
       .exec(),
     Product.countDocuments(queryFilter),
