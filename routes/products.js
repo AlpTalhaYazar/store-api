@@ -1,4 +1,5 @@
 import express from "express";
+import { parseQuery } from "../middleware/parse-query.js";
 import {
   getAllProducts,
   getProductById,
@@ -9,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.route("/").get(getAllProducts).post(createProduct);
+router.route("/").get(parseQuery, getAllProducts).post(createProduct);
 
 router
   .route("/:id")
