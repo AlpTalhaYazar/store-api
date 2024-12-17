@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { connectDB } from "./db/connect.js";
-import { Product } from "./models/product.js";
+import { Product } from "./models/Product.js";
 import { readFile } from "fs/promises";
 
 const jsonProducts = JSON.parse(

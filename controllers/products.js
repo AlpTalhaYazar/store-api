@@ -3,7 +3,8 @@ import { Result, PaginationResult } from "../utils/Result.js";
 import { createCustomError } from "../errors/custom-error.js";
 
 const getAllProducts = async (req, res) => {
-  const { sort, pageNum, limitNum, skip, fields, ...queryFilter } = req.queryFilter;
+  const { sort, pageNum, limitNum, skip, fields, ...queryFilter } =
+    req.queryFilter;
 
   const [products, total] = await Promise.all([
     Product.find(queryFilter)
